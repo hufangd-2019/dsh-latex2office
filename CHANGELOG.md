@@ -4,7 +4,7 @@ All notable changes to dsh-latex2office are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [0.1.1] - 2026-09-09
 
 ### Added
 - Tolerance for stray math delimiters: a single outer `$$..$$`, `$..$`, `\[..\]`,
