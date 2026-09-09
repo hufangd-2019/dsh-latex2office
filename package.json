@@ -1,0 +1,52 @@
+{
+  "name": "dsh-latex2office",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "LaTeX to Office formula tools for DeepSeek Harness: latex2office_insert (insert LaTeX formulas as native OMML equations or rendered images into existing .docx/.pptx at end/after_text/before_text/after_paragraph positions, atomic batch, numbered equations with academic tab layout, auto .bak backup, readback verification), latex2office_generate (create new .docx from formulas), latex2office_preview (render a formula to PNG). Engine: pandoc (LaTeX->OMML) + python-docx/python-pptx + LibreOffice headless rendering. Zero npm dependencies.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "latex",
+    "word",
+    "docx",
+    "pptx",
+    "omml",
+    "formula",
+    "equation"
+  ],
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "engine/engine.py",
+    "engine/omml_docx.py",
+    "engine/pptx_img.py",
+    "engine/render.py",
+    "cordis.patch.yml",
+    "dsh.plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hufangd-2019/dsh-latex2office.git"
+  },
+  "homepage": "https://github.com/hufangd-2019/dsh-latex2office#readme",
+  "bugs": {
+    "url": "https://github.com/hufangd-2019/dsh-latex2office/issues"
+  },
+  "license": "MIT"
+}

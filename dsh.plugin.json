@@ -1,0 +1,9 @@
+{
+  "name": "dsh-latex2office",
+  "description": "LaTeX to Office formula tools: latex2office_insert (LaTeX formulas as native OMML equations or rendered images into existing .docx/.pptx; positions end/after_text/before_text/after_paragraph; atomic batch; numbered equations; auto .bak backup; readback verification), latex2office_generate (new .docx from formulas), latex2office_preview (render formula to PNG). Engine: pandoc + python-docx/python-pptx + LibreOffice headless.",
+  "version": "0.1.0",
+  "entry": {
+    "name": "dsh-latex2office",
+    "inject": ["tools", "subprocess", "sandboxPolicy"]
+  }
+}

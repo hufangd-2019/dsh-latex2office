@@ -1,0 +1,13 @@
+# dsh-latex2office bundle patch: inserts this plugin into the profile's layer
+# stack. The loader resolves `name` from the profile's node_modules, so the
+# package must be installed (link:) AND declared in dsh.profile.bundles of
+# profiles/web/package.json.
+#
+# Optional config overrides (leave empty for auto-detection):
+#   pythonPath  — absolute path to a Python >=3.10 with python-docx/python-pptx/lxml/Pillow
+#   pandocPath  — absolute path to pandoc.exe (tested with 3.10.2)
+#   sofficePath — absolute path to LibreOffice soffice.com
+#   renderTimeoutSec — per-formula LibreOffice render timeout (default 90)
+- insert:
+    - id: latex2office-tools
+      name: 'dsh-latex2office'
