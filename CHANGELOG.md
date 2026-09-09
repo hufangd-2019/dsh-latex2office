@@ -4,6 +4,25 @@ All notable changes to dsh-latex2office are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [SemVer](https://semver.org/).
 
+## [0.1.2] - 2026-09-09
+
+### Fixed
+- **Tool registration schema (breaks every session on enable, 400 upstream).**
+  `ctx.tools.register()` forwards `parameters` **verbatim** to the model API as
+  the tool's JSON Schema. The 0.1.1 build passed a *flat property map*
+  (`{ file: {...}, title: {...}, ... }`), so the optional `title` property leaked
+  to the schema **root** and collided with the reserved JSON-Schema `title`
+  keyword, which the upstream draft-04 metaschema requires to be a *string*
+  (`'title' is not of type 'string'`) → `400 INVALID_REQUEST` on the very next
+  turn of any session with the plugin enabled. All three tools (`latex2office_insert`,
+  `latex2office_generate`, `latex2office_preview`) now register an object-rooted
+  schema: `{ type: 'object', properties: { ... }, required: [ ... ] }`, with
+  `required` lifted out of each property into a root `required` array. The
+  `execute()` argument handling is unchanged (it already read flat `args`).
+- Verified against the JSON-Schema metaschema: each tool's `parameters` now
+  validates cleanly; the old flat map is reproduced as the 400 regression.
+- `dsh.plugin.json` version synced to `0.1.2` (was stale at `0.1.0`).
+
 ## [0.1.1] - 2026-09-09
 
 ### Added
