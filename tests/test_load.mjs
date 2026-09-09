@@ -228,6 +228,58 @@ try {
   fail('failure-path', 'threw (must never throw): ' + String(e))
 }
 
+// ---- 7. math-delimiter stripping (echo-engine probe, no real engine) ----
+// Re-apply the plugin with a stub spawn that echoes the request back, so the
+// latex strings the tools forward to the engine become directly assertable.
+{
+  const reg2 = []
+  const echoCtx = {
+    effect: (fn) => fn(),
+    tools: { register: (t) => reg2.push(t) },
+    subprocess: {
+      spawn: (opts) => {
+        const req = JSON.parse(opts.stdio.stdin.data)
+        const payload = req.action === 'preview' ? req.latex : (req.formulas || []).map((f) => f.latex).join('|')
+        return {
+          done: Promise.resolve({ exitCode: 0 }),
+          collected: { stdout: { readFrom: () => ({ text: JSON.stringify({ ok: true, echo: payload }) }) }, stderr: { readFrom: () => ({ text: '' }) } },
+        }
+      },
+      resolveExecutable: async (n) => (n === 'soffice' ? SOFFICE || PY : PY),
+    },
+    sandboxPolicy: { workspaceRoot: WORKDIR },
+  }
+  plugin.apply(echoCtx, {})
+  const pv = reg2.find((t) => t.name === 'latex2office_preview')
+  const ins = reg2.find((t) => t.name === 'latex2office_insert')
+  const gen = reg2.find((t) => t.name === 'latex2office_generate')
+  const cases = [
+    ['$$x^2$$', 'x^2'],
+    ['$E=mc^2$', 'E=mc^2'],
+    ['\\[a+b\\]', 'a+b'],
+    ['\\(p \\times q\\)', 'p \\times q'],
+    ['\\frac{1}{2}', '\\frac{1}{2}'],
+    ['\\$x\\$', '\\$x\\$'],
+    ['$a$ and $b$', '$a$ and $b$'],
+    ['\\text{cost} = $5 + $10', '\\text{cost} = $5 + $10'],
+    ['$$\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}$$', '\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}'],
+    ['$$$$', '$$$$'],
+  ]
+  for (const [input, want] of cases) {
+    const checks = [
+      ['preview', (await pv.execute({ latex: input }, {})).echo],
+      ['insert', (await ins.execute({ file: sample, formulas: [{ latex: input }] }, {})).echo],
+      ['generate', (await gen.execute({ output: join(WORKDIR, 'echo.docx'), formulas: [{ latex: input }] }, {})).echo],
+    ]
+    for (const [tool, got] of checks) {
+      if (got !== want) fail('strip-delims', tool + ' ' + JSON.stringify(input) + ' -> ' + JSON.stringify(got) + ', want ' + JSON.stringify(want))
+    }
+  }
+  log('strip-delims', cases.length + ' cases x 3 tools = ' + cases.length * 3 + ' assertions ok')
+  // restore the real-engine context for anything after this point
+  plugin.apply(ctx, {})
+}
+
 // cleanup
 try {
   rmSync(WORKDIR, { recursive: true, force: true })
