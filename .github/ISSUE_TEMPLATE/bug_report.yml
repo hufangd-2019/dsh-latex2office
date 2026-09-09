@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a problem with latex2office_insert / generate / preview
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Which tool
+      options:
+        - latex2office_insert
+        - latex2office_generate
+        - latex2office_preview
+    validations:
+      required: true
+  - type: textarea
+    id: latex
+    attributes:
+      label: The LaTeX you used
+      render: latex
+    validations:
+      required: true
+  - type: input
+    id: error
+    attributes:
+      label: Error code / message (from the returned JSON)
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: Host (pandoc / LibreOffice / Python versions, OS)

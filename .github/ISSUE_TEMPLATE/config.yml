@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: DSH plugin catalog (awesome-dsh-plugin)
+    url: https://awesome-dsh-plugin.com
+    about: For catalog/visibility questions, not plugin bugs.
