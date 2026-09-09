@@ -21,4 +21,4 @@ node_modules/
 test-output/
 
 # Local-only install/verification archive (contains machine paths)
-docs/
+docs/verification-local.md
