@@ -37,14 +37,14 @@ LaTeX → Office 公式插件（[DeepSeek Harness](https://www.deepseek.com) / D
 
 在 dshmarket 中搜索 `dsh-latex2office` 一键安装，重启 DSH 桌面端生效。
 
-### 方式二：手动（npm 依赖）
+### 方式二：手动（GitHub 依赖）
 
 编辑 DSH 数据目录下的 profile manifest（桌面端为 `harness/profiles/web/package.json`）：
 
 ```jsonc
 {
   "dependencies": {
-    "dsh-latex2office": "^0.1.0"        // ① 加依赖
+    "dsh-latex2office": "github:hufangd-2019/dsh-latex2office"   // ① 加依赖
   },
   "dsh": {
     "profile": {
