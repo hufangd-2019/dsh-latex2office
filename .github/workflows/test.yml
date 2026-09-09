@@ -1,0 +1,23 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install python deps (pandoc + LibreOffice are preinstalled on the runner image)
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-docx python-pptx lxml Pillow
+      - name: Byte-compile the engine
+        run: python -m py_compile engine/engine.py engine/omml_docx.py engine/pptx_img.py engine/render.py
+      - name: Isolated load test (import, apply, generate/preview/insert e2e, failure paths, delimiter stripping)
+        run: node tests/test_load.mjs
